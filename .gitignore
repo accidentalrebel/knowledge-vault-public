@@ -1,0 +1,6 @@
+.env
+.state/
+vault/.obsidian/workspace.json
+vault/.trash/
+*.bak
+__pycache__/

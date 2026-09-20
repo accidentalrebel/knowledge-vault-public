@@ -1,0 +1,20 @@
+# GitGuardian configuration.
+#
+# tests/test_secrets.py is the fixture file for this repository's own secret
+# detector (reviewer/secrets.py). Every credential-shaped string in it is
+# synthetic by design: the suite cannot assert that a scanner detects an AWS key
+# or a JWT without containing something shaped like one.
+#
+# The structurally valid tokens were removed in favour of fixtures assembled at
+# runtime, so the current file holds no literal to match. This entry keeps the
+# path out of scope so historical commits in an open pull request do not keep
+# re-raising the same resolved findings.
+#
+# This suppresses one fixture file, not a directory and not the repository. Any
+# real credential elsewhere is still reported, and the reviewer additionally
+# scans every note packet before it leaves the machine.
+version: 2
+
+secret:
+  ignored_paths:
+    - tests/test_secrets.py

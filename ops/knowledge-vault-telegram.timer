@@ -1,0 +1,11 @@
+[Unit]
+Description=Announce newly prepared knowledge drafts and pending outcomes every minute
+
+[Timer]
+OnBootSec=60
+OnUnitInactiveSec=60
+AccuracySec=5
+Unit=knowledge-vault-telegram.service
+
+[Install]
+WantedBy=timers.target

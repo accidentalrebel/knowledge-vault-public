@@ -1,0 +1,16 @@
+[Unit]
+Description=Review one knowledge candidate within the hourly and rolling daily limits
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/you/development/knowledge-vault
+Environment=PATH=/home/you/.nvm/versions/node/v24.21.0/bin:/home/you/.local/bin:/usr/local/bin:/usr/bin:/bin
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 -m reviewer --config /home/you/development/knowledge-vault/ops/reviewer.json run
+TimeoutStartSec=630
+KillMode=control-group
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/you/development/knowledge-vault/.state/reviewer /home/you/.claude /home/you/.codex /home/you/.claude-glm

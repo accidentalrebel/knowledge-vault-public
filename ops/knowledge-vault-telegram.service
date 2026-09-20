@@ -1,0 +1,19 @@
+[Unit]
+Description=Announce new knowledge drafts as a dashboard link and deliver pending outcomes
+Wants=telegram-inbox.service
+After=telegram-inbox.service network.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/you/development/knowledge-vault
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/bash -c 'source /home/you/.claude-shared/telegram.env && exec /usr/bin/python3 -m reviewer --config /home/you/development/knowledge-vault/ops/reviewer.json telegram-tick'
+TimeoutStartSec=240
+KillMode=control-group
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/you/development/knowledge-vault/.state /home/you/development/knowledge-vault/vault
+

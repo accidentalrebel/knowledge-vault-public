@@ -1,0 +1,10 @@
+[Unit]
+Description=Refresh the personal knowledge vault index every minute
+
+[Timer]
+OnBootSec=30s
+OnUnitInactiveSec=60s
+Unit=knowledge-vault-sync.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,11 @@
+[Unit]
+Description=Review one knowledge candidate hourly within the rolling daily allowance
+
+[Timer]
+OnBootSec=60
+OnUnitInactiveSec=1h
+AccuracySec=30
+Unit=knowledge-vault-review.service
+
+[Install]
+WantedBy=timers.target

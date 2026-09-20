@@ -1,0 +1,57 @@
+name: knowledge-vault
+services:
+  database:
+    image: pgvector/pgvector@sha256:a947c45cdc5906a1bc951f20a8709e321256343ee0f251e4ae00b5e7def4e6da
+    restart: unless-stopped
+    mem_limit: 1g
+    env_file: /home/you/development/khoj-lab/.env
+    environment:
+      POSTGRES_USER: khoj
+      POSTGRES_DB: khoj
+    volumes:
+      - database:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U khoj -d khoj']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  server:
+    image: ghcr.io/khoj-ai/khoj@sha256:291137d53db702c36ef396afd399109eee2cb605c0818a0ce6d3d1eefa653c1b
+    restart: unless-stopped
+    mem_limit: 6g
+    cpus: 2
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - 127.0.0.1:42111:42110
+    env_file: /home/you/development/khoj-lab/.env
+    environment:
+      POSTGRES_HOST: database
+      POSTGRES_PORT: '5432'
+      POSTGRES_USER: khoj
+      POSTGRES_DB: khoj
+      KHOJ_ADMIN_EMAIL: knowledge-vault@example.invalid
+      KHOJ_DEBUG: 'False'
+      KHOJ_TELEMETRY_DISABLE: 'True'
+      KHOJ_NO_HTTPS: 'True'
+      KHOJ_DOMAIN: localhost
+      KHOJ_ALLOWED_DOMAIN: 127.0.0.1
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '2'
+    volumes:
+      - config:/root/.khoj
+      - models:/root/.cache
+    command: ['--host=0.0.0.0', '--port=42110', '--anonymous-mode', '--non-interactive']
+    healthcheck:
+      test: [CMD, python3, -c, 'import urllib.request; urllib.request.urlopen("http://127.0.0.1:42110/api/v1/user", timeout=5)']
+      interval: 15s
+      timeout: 10s
+      start_period: 180s
+      retries: 10
+volumes:
+  database:
+  config:
+  models:
+    external: true
+    name: khoj-lab_models

@@ -1,0 +1,101 @@
+{
+  "_example": "Redacted example configuration. Paths, the Tailscale host and the allowed login are placeholders; replace them before running anything.",
+  "state": "/home/you/development/knowledge-vault/.state/reviewer",
+  "vault": "/home/you/development/knowledge-vault/vault",
+  "source_roots": [
+    "/home/you/development"
+  ],
+  "providers": [
+    {
+      "name": "claude",
+      "kind": "claude",
+      "enabled": true,
+      "executable": "/home/you/.nvm/versions/node/v24.21.0/bin/claude",
+      "profile": "/home/you/.claude",
+      "model": "claude-opus-5"
+    },
+    {
+      "name": "codex",
+      "kind": "codex",
+      "enabled": true,
+      "executable": "/home/you/.local/bin/codex",
+      "profile": "/home/you/.codex",
+      "model": "gpt-6-astra"
+    },
+    {
+      "name": "glm",
+      "kind": "glm",
+      "enabled": true,
+      "executable": "/home/you/.nvm/versions/node/v24.21.0/bin/claude",
+      "profile": "/home/you/.claude-glm",
+      "model": "glm-5.3",
+      "endpoint": "https://api.z.ai/api/anthropic"
+    },
+    {
+      "name": "ollama",
+      "kind": "ollama",
+      "enabled": true,
+      "endpoint": "http://127.0.0.1:11434",
+      "model": "qwen3.5:9b-64k"
+    }
+  ],
+  "publication": {
+    "khoj_source": "/home/you/development/khoj-lab/src",
+    "state": "/home/you/development/knowledge-vault/.state"
+  },
+  "telegram": {
+    "spool": "/home/you/.cache/telegram-bridge/inbox.jsonl",
+    "bridge_scripts": "/home/you/development/telegram-agent-bridge/scripts"
+  },
+  "dashboard": {
+    "host": "127.0.0.1",
+    "port": 8902,
+    "public_origin": "https://your-host.your-tailnet.ts.net",
+    "base_path": "/knowledge-review",
+    "allowed_login": "you@github",
+    "secret": "/home/you/development/knowledge-vault/.state/dashboard.secret"
+  },
+  "jev": {
+    "enabled": true,
+    "_comment": "Autonomous approval gate. Sensitivity level 2 was redefined to mean another party's confidential operations rather than any internal operational detail, because the old wording classified the operator describing their own machine as a disclosure and blocked the security-operations lessons worth keeping. p2plus tightened from 0.50 to 0.35 to match the narrower, more serious level. Credentials remain the deterministic scanner's job, which runs before the packet leaves the machine.",
+    "approve": {
+      "factual_support": {
+        "p4": 0.25,
+        "p3plus": 0.85
+      },
+      "durability": {
+        "p3plus": 0.8
+      },
+      "reference_value": {
+        "p3plus": 0.8
+      }
+    },
+    "sensitivity_block": {
+      "p4": 0.01,
+      "p3plus": 0.05,
+      "p2plus": 0.35
+    },
+    "revise": {
+      "durability": {
+        "p3plus": 0.8
+      },
+      "reference_value": {
+        "p3plus": 0.8
+      }
+    },
+    "max_revisions": 2
+  },
+  "review": {
+    "batch": 6,
+    "_comment": "Six candidates per run measured ~7.1k output tokens in ~91s against the 180s provider timeout. Add interval_seconds to override the default hourly spacing when draining a backlog."
+  },
+  "dedup": {
+    "khoj_url": "http://127.0.0.1:42111",
+    "namespace": "knowledge",
+    "manifest": "/home/you/development/knowledge-vault/.state/sync-manifest.json",
+    "neighbours": 5,
+    "max_notes": 24,
+    "max_bytes": 96000,
+    "_comment": "Duplicate comparison asks Khoj which notes a candidate could collide with instead of sending the whole vault. Recall measured 44/44 at rank 1 from title alone; real duplicates sat within 0.10 while unrelated candidates had no neighbour closer than 0.15. Notes the sync manifest reports as unindexed are supplied in full regardless, because search cannot see them. Remove this section to fall back to the whole-vault packet and its 128000-byte ceiling."
+  }
+}

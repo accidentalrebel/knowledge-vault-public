@@ -1,0 +1,13 @@
+[Unit]
+Description=Synchronize the personal knowledge vault with Khoj
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/you/development/khoj-lab
+Environment=KHOJ_URL=http://127.0.0.1:42111
+Environment=KHOJ_NAMESPACE=knowledge
+Environment=KHOJ_SENTINEL_NAME=.knowledge-vault
+Environment=KHOJ_SENTINEL_CONTENT=personal-knowledge-v1
+ExecStart=/home/you/development/khoj-lab/.venv/bin/khoj-sync --vault /home/you/development/knowledge-vault/vault --state /home/you/development/knowledge-vault/.state
+TimeoutStartSec=900
+NoNewPrivileges=true
